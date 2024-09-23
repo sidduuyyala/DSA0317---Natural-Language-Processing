@@ -1,0 +1,35 @@
+import re
+rules = {
+    'NN': [r'\b(dog|cat|mouse)\b'],  
+    'VB': [r'\b(chases|runs|jumps)\b'],  
+    'JJ': [r'\b(big|small|happy)\b'],  
+    'IN': [r'\b(of|in|on)\b'],  
+    'DT': [r'\b(the|a|an)\b']  
+}
+def pos_tag(sentence):
+    tokens = sentence.split()
+    tagged_tokens = []
+
+    for token in tokens:
+        token = token.lower()
+        tagged = False
+
+        for pos, patterns in rules.items():
+            for pattern in patterns:
+                if re.match(pattern, token):
+                    tagged_tokens.append((token, pos))
+                    tagged = True
+                    break
+
+            if tagged:
+                break
+
+        if not tagged:
+            tagged_tokens.append((token, 'Unknown'))
+
+    return tagged_tokens
+
+sentence = "The big dog chases the small cat."
+tagged_sentence = pos_tag(sentence)
+for token, pos in tagged_sentence:
+    print(f"{token}: {pos}")
